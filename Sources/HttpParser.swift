@@ -25,6 +25,9 @@ public class HttpParser {
         request.method = statusLineTokens[0]
         request.path = statusLineTokens[1]
         request.queryParams = extractQueryParams(request.path)
+        if request.path.contains("?") {
+            request.path = request.path.components(separatedBy: "?").first! as String
+        }
         request.headers = try readHeaders(socket)
         if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
             request.body = try readBody(socket, size: contentLengthValue)
