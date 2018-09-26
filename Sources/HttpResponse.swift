@@ -22,7 +22,7 @@ public protocol HttpResponseBodyWriter {
 
 public enum HttpResponseBody {
     
-    case json(AnyObject)
+    case json([String:Any?])
     case jsonString(String)
     case html(String)
     case text(String)
