@@ -24,6 +24,7 @@ public enum HttpResponseBody {
     
     case json([String:Any?])
     case jsonString(String)
+    case jsonData(Data)
     case html(String)
     case text(String)
     case data(Data)
@@ -47,6 +48,10 @@ public enum HttpResponseBody {
                 })
             case .jsonString(let body):
                 let data = [UInt8](body.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
+            case .jsonData(let data):
                 return (data.count, {
                     try $0.write(data)
                 })
@@ -127,6 +132,7 @@ public enum HttpResponse {
         case .ok(let body):
             switch body {
             case .jsonString(_)   : headers["Content-Type"] = "application/json"
+            case .jsonData(_)   : headers["Content-Type"] = "application/json"
             case .json(_)   : headers["Content-Type"] = "application/json"
             case .html(_)   : headers["Content-Type"] = "text/html"
             default:break
